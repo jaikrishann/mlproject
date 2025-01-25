@@ -22,6 +22,7 @@ def connect_to_mongodb():
         # Connect to the MongoDB server
         client = MongoClient(mongodb_connection_string)  # Default port
         print("Connected to MongoDB Server")
+        return client
         
     except Error as e:
         custom_exception=InsuranceException(e,sys)
@@ -53,57 +54,58 @@ def connect_to_mysql():
     
         return None
 
+if __name__ == "__main__":
 
 
-def create_table(connection):
-    try:
-        cursor = connection.cursor()
-        # Define the table structure
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS insurance_data (
-            bmi FLOAT NOT NULL,
-            children INT NOT NULL,
-            smoker VARCHAR(10) NOT NULL,
-            region VARCHAR(50) NOT NULL,
-            charges FLOAT NOT NULL
-        );
-        """
-        cursor.execute(create_table_query)
-        print("Table 'insurance_data' created successfully (or already exists).")
-    except Error as e:
-        raise InsuranceException(e,sys)
+    def create_table(connection):
+        try:
+            cursor = connection.cursor()
+            # Define the table structure
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS insurance_data (
+                bmi FLOAT NOT NULL,
+                children INT NOT NULL,
+                smoker VARCHAR(10) NOT NULL,
+                region VARCHAR(50) NOT NULL,
+                charges FLOAT NOT NULL
+            );
+            """
+            cursor.execute(create_table_query)
+            print("Table 'insurance_data' created successfully (or already exists).")
+        except Error as e:
+            raise InsuranceException(e,sys)
 
-def Dump_data_sql(connection, csv_file_path):
-    try:
-        cursor = connection.cursor()
-        # Use the LOCAL option to load from a local file
-        load_data_query = f"""
-        LOAD DATA LOCAL INFILE '{csv_file_path}'
-        INTO TABLE insurance_data
-        FIELDS TERMINATED BY ','   -- Column separator
-        ENCLOSED BY '"'            -- Text delimiter (optional)
-        LINES TERMINATED BY '\\n'  -- Row delimiter
-        IGNORE 1 LINES;           -- Ignore header row
-        """
-        cursor.execute(load_data_query)
-        connection.commit()  # Commit the changes to the database
-        print("Data loaded successfully from CSV.")
-    except Error as e:
-        print(f"Error loading data from CSV: {e}")
+    def Dump_data_sql(connection, csv_file_path):
+        try:
+            cursor = connection.cursor()
+            # Use the LOCAL option to load from a local file
+            load_data_query = f"""
+            LOAD DATA LOCAL INFILE '{csv_file_path}'
+            INTO TABLE insurance_data
+            FIELDS TERMINATED BY ','   -- Column separator
+            ENCLOSED BY '"'            -- Text delimiter (optional)
+            LINES TERMINATED BY '\\n'  -- Row delimiter
+            IGNORE 1 LINES;           -- Ignore header row
+            """
+            cursor.execute(load_data_query)
+            connection.commit()  # Commit the changes to the database
+            print("Data loaded successfully from CSV.")
+        except Error as e:
+            print(f"Error loading data from CSV: {e}")
 
-# Connect to MySQL
-connection = connect_to_mysql()
-if connection:
-    # Create the table if it doesn't exist
-    create_table(connection)
-    
-    # Specify the path to your CSV file
-    csv_file_path = './firsthalf_data.csv'  # Update this path
-    
-    # Load data from CSV into the table
-    Dump_data_sql(connection, csv_file_path)
+    # Connect to MySQL
+    connection = connect_to_mysql()
+    if connection:
+        # Create the table if it doesn't exist
+        create_table(connection)
+        
+        # Specify the path to your CSV file
+        csv_file_path = './firsthalf_data.csv'  # Update this path
+        
+        # Load data from CSV into the table
+        Dump_data_sql(connection, csv_file_path)
 
-    # Close connection
-    connection.close()
-    print("Connection closed.")
+        # Close connection
+        connection.close()
+        print("Connection closed.")
 
