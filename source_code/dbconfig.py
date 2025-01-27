@@ -5,19 +5,16 @@ import os , sys
 from source_code.logger import logging 
 from source_code.execption import InsuranceException
 import pandas as pd
+
 from pymongo import MongoClient
+import typing
 load_dotenv()
 
-mysql_user = os.getenv("mysql_user")
-mysql_password = os.getenv("mysql_password")
-mysql_database_name = os.getenv("mysql_database")
-
-
-mongodb_connection_string = os.getenv("mongodb_connection_string")
 
 
 
-def connect_to_mongodb():
+
+def connect_to_mongodb(mongodb_connection_string:str):
     try:
         # Connect to the MongoDB server
         client = MongoClient(mongodb_connection_string)  # Default port
@@ -30,7 +27,7 @@ def connect_to_mongodb():
         raise InsuranceException(e,sys)
         return None
 
-def connect_to_mysql():
+def connect_to_mysql(mysql_user:str,mysql_password:str,mysql_database_name:str):
     try:
         # Connect to the MySQL server
         connection = mysql.connector.connect(
