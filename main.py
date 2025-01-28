@@ -27,19 +27,29 @@ from source_code.components.data_ingestion import DataIngestion
 training_pipeline_obj=config_entity.TrainingPipelineConfig()
 dataingestion_config_obj=config_entity.DataIngestionConfig(training_pipeline_config_obj=training_pipeline_obj)
 
-mongo_conn=connect_to_mongodb(
-    mongodb_connection_string=dataingestion_config_obj.mongodb_connection)
+dataingestion_obj = DataIngestion(dataingestion_config_obj=dataingestion_config_obj)
 
-sql_conn = connect_to_mysql(mysql_user=dataingestion_config_obj.mysql_user,
-                            mysql_password=dataingestion_config_obj.mysql_password,
-                            mysql_database_name=dataingestion_config_obj.mysql_database_name)
+data_ingestion_artifact=dataingestion_obj.load_datasets()
+
+print("data file path",data_ingestion_artifact.Dataset_file_path)
+print("train file path",data_ingestion_artifact.Train_df_path)
+print("test file path",data_ingestion_artifact.Test_df_path)
 
 
-if is_mongo_connected(mongo_conn):
-    dataingestion_obj=DataIngestion(dataingestion_config_obj=dataingestion_config_obj)
-    dataingestion_obj.load_datasets()
-else:
-    print("MongoDB is not connected")
+
+# mongo_conn=connect_to_mongodb(
+#     mongodb_connection_string=dataingestion_config_obj.mongodb_connection)
+
+# sql_conn = connect_to_mysql(mysql_user=dataingestion_config_obj.mysql_user,
+#                             mysql_password=dataingestion_config_obj.mysql_password,
+#                             mysql_database_name=dataingestion_config_obj.mysql_database_name)
+
+
+# if is_mongo_connected(mongo_conn):
+#     dataingestion_obj=DataIngestion(dataingestion_config_obj=dataingestion_config_obj)
+#     dataingestion_obj.load_datasets()
+# else:
+#     print("MongoDB is not connected")
 
 
 

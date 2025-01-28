@@ -30,5 +30,9 @@ class DataIngestionConfig:
             self.mongodb_connection = os.getenv("mongodb_connection_string")
             self.mongodb_database = os.getenv("mongodb_db")
             self.mongodb_collection = os.getenv("mongodb_collection")
+            self.test_size = 0.2
+            self.dataset_filename = "insurance.csv"
+            self.train_set_filename = "train.csv"
+            self.test_set_filename = "test.csv"
         except Exception as e:
             raise InsuranceException(e,sys)
