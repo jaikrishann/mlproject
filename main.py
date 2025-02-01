@@ -5,6 +5,25 @@ from source_code.entity import config_entity
 from source_code.dbconfig import connect_to_mongodb, connect_to_mysql
 from source_code.utlis import is_mongo_connected
 from source_code.components.data_ingestion import DataIngestion
+from source_code.components.data_validation import DataValidation
+
+
+
+training_pipeline_obj=config_entity.TrainingPipelineConfig()
+dataingestion_config_obj=config_entity.DataIngestionConfig(training_pipeline_config_obj=training_pipeline_obj)
+
+dataingestion_obj = DataIngestion(dataingestion_config_obj=dataingestion_config_obj)
+
+data_ingestion_artifact=dataingestion_obj.load_datasets()
+
+data_valdation_config=config_entity.DataValidationConfig(training_pipeline_config_obj=training_pipeline_obj)
+
+datavalidation_obj = DataValidation(data_validation_config_obj=data_valdation_config,
+                                    dataingestion_artifact_obj=data_ingestion_artifact)
+
+data_validation_artifact=datavalidation_obj.initiate_datavalidation()
+
+print("successfully done your data validation")
 
 
 
@@ -24,16 +43,16 @@ from source_code.components.data_ingestion import DataIngestion
 #     print(obj.error_message)
 
 
-training_pipeline_obj=config_entity.TrainingPipelineConfig()
-dataingestion_config_obj=config_entity.DataIngestionConfig(training_pipeline_config_obj=training_pipeline_obj)
 
-dataingestion_obj = DataIngestion(dataingestion_config_obj=dataingestion_config_obj)
+# print("data file path",data_ingestion_artifact.Dataset_file_path)
 
-data_ingestion_artifact=dataingestion_obj.load_datasets()
 
-print("data file path",data_ingestion_artifact.Dataset_file_path)
-print("train file path",data_ingestion_artifact.Train_df_path)
-print("test file path",data_ingestion_artifact.Test_df_path)
+
+
+
+
+# print("train file path",data_ingestion_artifact.Train_df_path)
+# print("test file path",data_ingestion_artifact.Test_df_path)
 
 
 

@@ -59,13 +59,15 @@ if __name__ == "__main__":
             cursor = connection.cursor()
             # Define the table structure
             create_table_query = """
-            CREATE TABLE IF NOT EXISTS insurance_data (
-                bmi FLOAT NOT NULL,
-                children INT NOT NULL,
-                smoker VARCHAR(10) NOT NULL,
-                region VARCHAR(50) NOT NULL,
-                charges FLOAT NOT NULL
-            );
+            CREATE TABLE insurance_data (
+                    age INT NOT NULL,
+                    sex VARCHAR(10) NOT NULL,
+                    bmi FLOAT NOT NULL,
+                    children INT NOT NULL,
+                    smoker VARCHAR(10) NOT NULL,
+                    region VARCHAR(50) NOT NULL,
+                    charges FLOAT NOT NULL
+                );
             """
             cursor.execute(create_table_query)
             print("Table 'insurance_data' created successfully (or already exists).")
