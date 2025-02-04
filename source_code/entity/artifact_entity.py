@@ -13,3 +13,8 @@ class DataIngestArtifact:
 class DataValidationArtifact:
     Valid_data_path : str
     Invalid_data_path : str
+
+
+@dataclass
+class DataCleaningArtifact:
+    Clean_data_path : str

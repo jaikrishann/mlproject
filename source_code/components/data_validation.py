@@ -35,7 +35,7 @@ class DataValidation:
 
     @staticmethod
     def validate_bmi(value):
-        return isinstance(value, (int, float)) and value > 0 and value <=40
+        return isinstance(value, (int, float)) and value > 0 and value <=41
     @staticmethod
     def validate_children(value):
         return isinstance(value, int) and value >= 0 and value <=5
@@ -79,6 +79,7 @@ class DataValidation:
                 # df.drop(invalid_rows.index, inplace=True)
                 if invalid_rows.empty:
                     logging.info("No invalid rows found.")
+                    print("No invalid rows found.")
 
 
                     os.makedirs(self.DataValidationConfig.data_validation_dir,exist_ok=True)
@@ -87,6 +88,7 @@ class DataValidation:
                 else:
                     logging.info(f"Invalid rows found: {invalid_rows.shape[0]}")
                     #save the invalid rows
+                    print("invalid rows found")
                     os.makedirs(self.DataValidationConfig.data_validation_dir,exist_ok=True)
                    
                     invalid_rows.to_csv(self.DataValidationConfig.invalid_data_file_path,index=False)

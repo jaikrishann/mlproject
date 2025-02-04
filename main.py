@@ -6,6 +6,7 @@ from source_code.dbconfig import connect_to_mongodb, connect_to_mysql
 from source_code.utlis import is_mongo_connected
 from source_code.components.data_ingestion import DataIngestion
 from source_code.components.data_validation import DataValidation
+from source_code.components.data_cleaning import DataCleaning
 
 
 
@@ -15,6 +16,9 @@ dataingestion_config_obj=config_entity.DataIngestionConfig(training_pipeline_con
 dataingestion_obj = DataIngestion(dataingestion_config_obj=dataingestion_config_obj)
 
 data_ingestion_artifact=dataingestion_obj.load_datasets()
+print("ingestion done ")
+
+
 
 data_valdation_config=config_entity.DataValidationConfig(training_pipeline_config_obj=training_pipeline_obj)
 
@@ -22,8 +26,17 @@ datavalidation_obj = DataValidation(data_validation_config_obj=data_valdation_co
                                     dataingestion_artifact_obj=data_ingestion_artifact)
 
 data_validation_artifact=datavalidation_obj.initiate_datavalidation()
-
 print("successfully done your data validation")
+
+
+
+data_cleaning_config_obj=config_entity.DataCleaningConfig(training_pipeline_config_obj=training_pipeline_obj)
+datacleaning_obj=DataCleaning(data_cleaning_config_obj= data_cleaning_config_obj,
+             datavalidation_artifact=data_validation_artifact)
+
+data_cleaning_artifact = datacleaning_obj.DataCleaningInitiate()
+print("data cleaning done")
+
 
 
 
